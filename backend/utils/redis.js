@@ -21,10 +21,15 @@ async function updateRedisKey(key, value) {
   );
 }
 
+function delRedisKey(key) {
+  return client.del(key);
+}
+
 client.connect();
 
 module.exports = {
   getRedisKey,
   setRedisKey,
   updateRedisKey,
+  delRedisKey
 };

@@ -45,7 +45,7 @@ async function registerUser(req, res) {
   const timestamp = Date.now();
   await setRedisKey(`user:${name}`, {
     timestamp,
-    name: `user:${name}`,
+    name,
     password: hash,
     ownedRooms: [],
     guestRooms: [],
@@ -53,7 +53,7 @@ async function registerUser(req, res) {
 
   return res.status(201).json({
     name,
-    token: generateToken(name, timestamp),
+    token: generateToken(`user:${name}`, timestamp),
   });
 }
 
@@ -76,7 +76,7 @@ async function loginUser(req, res) {
 
   return res.status(200).json({
     name,
-    token: generateToken(name, user.timestamp),
+    token: generateToken(`user:${name}`, user.timestamp),
   });
 }
 
