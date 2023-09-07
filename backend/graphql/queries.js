@@ -1,6 +1,7 @@
-const { GraphQLObjectType } = require('graphql');
+const { GraphQLObjectType, GraphQLNonNull, GraphQLString } = require('graphql');
 
-const { UserType } = require('./types');
+const { getRoom } = require('../controllers/roomControllers');
+const { UserType, RoomType } = require('./types');
 
 const userQueries = {
   user: {
@@ -9,9 +10,20 @@ const userQueries = {
   },
 };
 
+const roomQueries = {
+  room: {
+    type: RoomType,
+    args: {
+      name: { type: GraphQLNonNull(GraphQLString) },
+    },
+    resolve: getRoom,
+  },
+};
+
 module.exports = new GraphQLObjectType({
   name: 'Query',
   fields: {
     ...userQueries,
+    ...roomQueries,
   },
 });

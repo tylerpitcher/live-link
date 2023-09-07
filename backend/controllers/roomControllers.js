@@ -22,7 +22,7 @@ async function getRoom(_, args) {
   const room = await getRedisKey(roomKey);
   if (!room) throw new Error('Room does not exist.');
 
-  if (!await getRedisKey(room.owner)) {
+  if (!await getRedisKey(`user:${room.owner}`)) {
     delRedisKey(roomKey);
     throw new Error('Owner no longer exists.');
   }
@@ -64,8 +64,8 @@ async function updateRoom(_, args, context) {
   if (owner.name !== room.owner) throw new Error('User does not own room.');
 
   const [removedGuests, newGuests] = difference(room.guests, args.guests);
-  await Promise.all(removedGuests.map((name) => updateGuest(owner, room.name, name, false)));
-  await Promise.all(newGuests.map((name) => updateGuest(owner, room.name, name, true)));
+  await Promise.all(removedGuests.map((name) => updateGuest(owner.name, room.name, name, false)));
+  await Promise.all(newGuests.map((name) => updateGuest(owner.name, room.name, name, true)));
 
   const updatedRoom = {
     ...room,
