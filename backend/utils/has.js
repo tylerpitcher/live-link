@@ -15,7 +15,7 @@ function hasNum(str) {
 }
 
 function hasSpecialChar(str) {
-  return /[@$!%*?&]/.test(str);
+  return /[@$!%*?&#]/.test(str);
 }
 
 module.exports = {
