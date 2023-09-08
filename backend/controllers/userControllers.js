@@ -72,7 +72,10 @@ async function loginUser(req, res) {
   const user = await getRedisKey(`user:${name}`);
   const match = await bcrypt.compare(password, user?.password || '');
   
-  if (!match) return res.sendStatus(401);
+  if (!match) return res.status(401).json({
+    code: 2,
+    msg: 'Credentials do not match.',
+  });
 
   return res.status(200).json({
     name,
