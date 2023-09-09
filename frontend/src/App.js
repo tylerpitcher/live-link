@@ -7,6 +7,7 @@ import useUserStore from './stores/userStore';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
+import Room from './pages/Room';
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -50,6 +51,9 @@ function App() {
             </Routes>
           </Grid>
         </Grid>
+        <Routes>
+          <Route path='/room/:room' element={<Room/>}/>
+        </Routes>
         </BrowserRouter>
       </ThemeProvider>
     </ApolloProvider>

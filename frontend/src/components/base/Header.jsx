@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import useUserStore from '../../stores/userStore';
 
-function Header() {
+function Header({ transparent }) {
   const { user, setUser, darkMode } = useUserStore();
   const navigate = useNavigate();
 
@@ -15,7 +15,7 @@ function Header() {
   }
 
   return (
-    <AppBar position='fixed' elevation={0}>
+    <AppBar position='fixed' elevation={0} {...transparent && { color: 'transparent' }}>
       <Toolbar>
         <Typography variant='h6' component='div' {...darkMode && { color: 'primary' }}>
           LiveLink
