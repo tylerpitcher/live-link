@@ -21,8 +21,8 @@ function callNewUser(me, myStream, newUser, setMedia) {
   }));
 
   peer.on('stream', (stream) => setMedia((videos) => ({
-      ...videos,
-      [newUser.name]: <Video key={newUser.name} name={newUser.name} stream={stream}/>,
+    ...videos,
+    [newUser.name]: <Video key={newUser.name} name={newUser.name} stream={stream}/>,
   })));
 }
 
