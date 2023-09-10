@@ -1,4 +1,4 @@
-import { Box, CardContent } from '@mui/material';
+import { Box, CardContent, Typography } from '@mui/material';
 import { gql, useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -27,6 +27,7 @@ function Home() {
   const navigate = useNavigate();
 
   const { loading, error, data } = useQuery(query, {
+    fetchPolicy: 'no-cache',
     pollInterval: 10000,
     context: {
       headers: {
@@ -37,7 +38,7 @@ function Home() {
 
   useEffect(() => {
     if (!user) navigate('/login');
-  }, [user]);
+  }, [user, navigate]);
 
   if (loading) return (
     <Box>
@@ -53,7 +54,10 @@ function Home() {
       <Header/>
       <StyledCardHeader title='Rooms'/>
       <CardContent>
-        <StyledLinkList items={rooms.map((room) => ({ text: room.name, to: `/room/${room.name}` }))}/>
+        {rooms.length 
+          ? <StyledLinkList items={rooms.map((room) => ({ text: room.name, to: `/room/${room.name}` }))}/>
+          : <Typography>You have no rooms.</Typography>
+        }
       </CardContent>
     </StyledCard>
   );

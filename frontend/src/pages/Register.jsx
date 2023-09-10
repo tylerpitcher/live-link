@@ -41,7 +41,7 @@ function Register() {
 
   useEffect(() => {
     if (user) navigate('/');
-  }, [user]);
+  }, [user, navigate]);
 
   return (
     <StyledForm title='Register' handleSubmit={handleSubmit}>
