@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 import Header from '../components/base/Header';
 import useUserStore from '../stores/userStore';
-import VideoPanel from '../components/video/VideoPanel';
+import VideoPanel from '../components/videos/VideoPanel';
 import Loader from '../components/base/Loader';
 
 const query = gql`

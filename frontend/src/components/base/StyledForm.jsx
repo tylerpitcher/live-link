@@ -1,5 +1,5 @@
 import { CardContent } from '@mui/material';
-import { StyledCard, StyledCardHeader } from '../card';
+import { StyledCard, StyledCardHeader } from '../cards';
 
 function StyledForm({ children, title, handleSubmit }) {
   return (

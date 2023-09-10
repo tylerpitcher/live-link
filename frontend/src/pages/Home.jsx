@@ -3,8 +3,8 @@ import { gql, useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
-import { StyledCard, StyledCardHeader } from '../components/card';
-import StyledLinkList from '../components/list/StyledButtonList';
+import { StyledCard, StyledCardHeader } from '../components/cards';
+import StyledLinkList from '../components/lists/StyledButtonList';
 import Header from '../components/base/Header';
 import Loader from '../components/base/Loader';
 import useUserStore from '../stores/userStore';
