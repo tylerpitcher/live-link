@@ -40,7 +40,7 @@ function Login() {
 
   useEffect(() => {
     if (user) navigate('/');
-  }, [user]);
+  }, [user, navigate]);
 
   return (
     <StyledForm title='Login' handleSubmit={handleSubmit}>

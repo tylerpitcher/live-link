@@ -1,7 +1,7 @@
 import { ThemeProvider, CssBaseline, createTheme, Grid } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ApolloProvider, InMemoryCache, ApolloClient } from '@apollo/client';
-import { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 
 import useUserStore from './stores/userStore';
 import Register from './pages/Register';
@@ -27,15 +27,11 @@ const client = new ApolloClient({
 });
 
 function App() {
-  const { user, darkMode } = useUserStore();
+  const { darkMode } = useUserStore();
 
   const theme = useMemo(() => createTheme({
     palette: { mode: darkMode ? 'dark' : 'light' },
   }));
-
-  useEffect(() => {
-    client.clearStore();
-  }, [user]);
 
   return (
     <ApolloProvider client={client}>    

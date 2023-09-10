@@ -17,6 +17,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0",
     "react-scripts": "5.0.1",
+    "simple-peer": "^9.11.1",
+    "socket.io-client": "^4.7.2",
     "zustand": "^4.4.1"
   },
   "scripts": {
