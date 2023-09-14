@@ -1,4 +1,4 @@
-import StyledList from './StyledList';
 import StyledListItem from './StyledListItem';
+import RoomsList from './RoomsList';
 
-export { StyledList, StyledListItem };
+export { RoomsList, StyledListItem };

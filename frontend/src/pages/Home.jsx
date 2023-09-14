@@ -1,39 +1,24 @@
-import { Box, CardContent, Typography } from '@mui/material';
-import { gql, useQuery } from '@apollo/client';
+import { Box, Button, CardContent } from '@mui/material';
+import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { StyledCard, StyledCardHeader } from '../components/cards';
-import StyledLinkList from '../components/lists/StyledButtonList';
+import CreateRoomModal from '../components/modals/CreateRoomModal';
+import { getContext, USER_ROOMS } from '../operations';
 import Header from '../components/base/Header';
 import Loader from '../components/base/Loader';
 import useUserStore from '../stores/userStore';
-
-const query = gql`
-  query getUserRooms {
-    user {
-      ownedRooms {
-        name
-      }
-      guestRooms {
-        name
-      }
-    }
-  }
-`;
+import { RoomsList } from '../components/lists';
 
 function Home() {
-  const { user } = useUserStore();
+  const [show, setShow] = useState(false);
+  const { user, logout } = useUserStore();
   const navigate = useNavigate();
 
-  const { loading, error, data } = useQuery(query, {
-    fetchPolicy: 'no-cache',
+  const { loading, error, data } = useQuery(USER_ROOMS, {
     pollInterval: 10000,
-    context: {
-      headers: {
-        Authorization: `Bearer ${user?.token}`,
-      },
-    },
+    ...getContext(user?.token),
   });
 
   useEffect(() => {
@@ -47,17 +32,23 @@ function Home() {
     </Box>
   );
 
-  const rooms = data.user.ownedRooms.concat(data.user.guestRooms);
+  if (error?.networkError.statusCode == 401) logout();
+
+  const ownedRooms = data.user.ownedRooms || [];
+  const guestRooms = data.user.guestRooms || [];
 
   return (
     <StyledCard>
       <Header/>
-      <StyledCardHeader title='Rooms'/>
-      <CardContent>
-        {rooms.length 
-          ? <StyledLinkList items={rooms.map((room) => ({ text: room.name, to: `/room/${room.name}` }))}/>
-          : <Typography>You have no rooms.</Typography>
+      {show && <CreateRoomModal hide={() => setShow(false)}/>}
+      <StyledCardHeader 
+        title='Rooms'
+        action={
+          <Button onClick={() => setShow(true)}>Create Room</Button>
         }
+      />
+      <CardContent>
+        <RoomsList ownedRooms={ownedRooms} guestRooms={guestRooms}/>
       </CardContent>
     </StyledCard>
   );

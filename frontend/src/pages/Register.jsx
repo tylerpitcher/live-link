@@ -49,7 +49,6 @@ function Register() {
       <TextField 
         name='name'
         value={name}  
-        variant='standard' 
         placeholder='Username' 
         onChange={(event) => setName(event.target.value)}
         error={error.code === 1}
@@ -59,7 +58,6 @@ function Register() {
       <TextField 
         name='password1' 
         value={password1}
-        variant='standard' 
         placeholder='Password' 
         type='password'
         onChange={(event) => setPassword1(event.target.value)}
@@ -70,7 +68,6 @@ function Register() {
       <TextField 
         name='password2' 
         value={password2}
-        variant='standard' 
         placeholder='Password Again' 
         type='password'
         onChange={(event) => setPassword2(event.target.value)}

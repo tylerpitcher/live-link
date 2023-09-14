@@ -1,40 +1,24 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { gql, useQuery } from '@apollo/client';
-import { Box, Grid } from '@mui/material';
+import { useQuery } from '@apollo/client';
+import { Box } from '@mui/material';
 import { useEffect } from 'react';
 
 import Header from '../components/base/Header';
 import useUserStore from '../stores/userStore';
 import VideoPanel from '../components/videos/VideoPanel';
+import Center from '../components/base/Center';
 import Loader from '../components/base/Loader';
-
-const query = gql`
-  query getRoom($room: String!) {
-    room(name: $room) {
-      name
-      owner {
-        name
-      }
-      guests {
-        name
-      }
-    }
-  }
-`;
+import { getContext, ROOM } from '../operations';
 
 function Room() {
   const { user } = useUserStore();
   const navigate = useNavigate();
   const { room } = useParams();
 
-  const { loading, error, data } = useQuery(query, {
+  const { loading, error } = useQuery(ROOM, {
     variables: { room },
     pollInterval: 10000,
-    context: {
-      headers: {
-        Authorization: `Bearer ${user?.token}`,
-      },
-    },
+    ...getContext(user?.token),
   });
 
   useEffect(() => {
@@ -42,11 +26,16 @@ function Room() {
   }, [user, navigate]);
 
   if (loading) return (
-    <Grid position='fixed' justifyContent='center' alignItems='center' sx={{ height: 1 }} container>
-      <Grid md={5} sm={8} xs={11} item>
-        <Loader/>
-      </Grid>
-    </Grid>
+    <Center>
+      <Loader/>
+    </Center>
+  );
+
+  if (error) return (
+    <Center>
+      {error.message}
+      <Header transparent/>
+    </Center>
   );
 
   return (
