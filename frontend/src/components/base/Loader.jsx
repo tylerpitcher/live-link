@@ -1,5 +1,4 @@
 import { Fade, LinearProgress } from '@mui/material';
-import Header from './Header';
 
 function Loader() {
   return (

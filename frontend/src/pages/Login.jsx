@@ -48,7 +48,6 @@ function Login() {
       <TextField 
         name='name'
         value={name}  
-        variant='standard' 
         placeholder='Username' 
         onChange={(event) => setName(event.target.value)}
         error={error.code === 1}
@@ -58,7 +57,6 @@ function Login() {
       <TextField 
         name='password' 
         value={password}
-        variant='standard' 
         placeholder='Password' 
         type='password'
         onChange={(event) => setPassword(event.target.value)}

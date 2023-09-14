@@ -1,9 +1,10 @@
-import { ThemeProvider, CssBaseline, createTheme, Grid } from '@mui/material';
+import { ThemeProvider, CssBaseline, createTheme } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ApolloProvider, InMemoryCache, ApolloClient } from '@apollo/client';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import useUserStore from './stores/userStore';
+import Center from './components/base/Center';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -13,6 +14,9 @@ const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
+        user: {
+          merge: (_, incoming) => incoming
+        },
         room: {
           merge: (_, incoming) => incoming,
         },
@@ -31,22 +35,38 @@ function App() {
 
   const theme = useMemo(() => createTheme({
     palette: { mode: darkMode ? 'dark' : 'light' },
+    components: {
+      MuiTextField: {
+        defaultProps: {
+          variant: 'standard'
+        },
+      },
+      MuiAlert: {
+        defaultProps: {
+          variant: 'outlined'
+        },
+      },
+    },
   }));
+
+  useEffect(() => {
+    return () => {
+      client.clearStore();
+    };
+  });
 
   return (
     <ApolloProvider client={client}>    
       <ThemeProvider theme={theme}>
         <CssBaseline/>
         <BrowserRouter>
-        <Grid position='fixed' justifyContent='center' alignItems='center' sx={{ height: 1 }} container>
-          <Grid md={5} sm={8} xs={11} item>
-            <Routes>
-              <Route path='/register' element={<Register/>}/>
-              <Route path='/login' element={<Login/>}/>
-              <Route path='/' element={<Home/>}/>
-            </Routes>
-          </Grid>
-        </Grid>
+        <Center>
+          <Routes>
+            <Route path='/register' element={<Register/>}/>
+            <Route path='/login' element={<Login/>}/>
+            <Route path='/' element={<Home/>}/>
+          </Routes>
+        </Center>
         <Routes>
           <Route path='/room/:room' element={<Room/>}/>
         </Routes>
