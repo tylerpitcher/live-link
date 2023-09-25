@@ -32,7 +32,7 @@ function Home() {
     </Box>
   );
 
-  if (error?.networkError.statusCode == 401) logout();
+  if (error?.networkError.statusCode === 401) logout();
 
   const ownedRooms = data.user.ownedRooms || [];
   const guestRooms = data.user.guestRooms || [];

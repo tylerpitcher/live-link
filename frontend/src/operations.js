@@ -16,6 +16,9 @@ const USER_ROOMS = gql`
       name
       ownedRooms {
         name
+        guests {
+          name
+        }
       }
       guestRooms {
         name
@@ -46,4 +49,12 @@ const CREATE_ROOM = gql`
   }
 `;
 
-export { getContext, USER_ROOMS, ROOM, CREATE_ROOM };
+const UPDATE_ROOM = gql`
+  mutation UpdateRoom($name: String!, $guests: [String]!) {
+    updateRoom(name: $name, guests: $guests) {
+      name
+    }
+  }
+`;
+
+export { getContext, USER_ROOMS, ROOM, CREATE_ROOM, UPDATE_ROOM };
