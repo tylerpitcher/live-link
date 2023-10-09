@@ -1,13 +1,13 @@
 import { useMutation } from '@apollo/client';
 
-import { getContext, CREATE_ROOM, USER_ROOMS } from '../../operations';
+import { getContext, UPDATE_ROOM, USER_ROOMS } from '../../operations';
 import useUserStore from '../../stores/userStore';
 import RoomModal from './RoomModal';
 
-function CreateRoomModal({ hide }) {
+function ModifyRoomModal({ room, hide }) {
   const { user } = useUserStore();
 
-  const [createRoom] = useMutation(CREATE_ROOM, {
+  const [updateRoom] = useMutation(UPDATE_ROOM, {
     ...getContext(user?.token),
     refetchQueries: [{ 
       query: USER_ROOMS,
@@ -17,12 +17,14 @@ function CreateRoomModal({ hide }) {
 
   return (
     <RoomModal
-      title='Create Room' 
-      msg='Create a room with a unique name.'
-      mutation={createRoom}
+      modify
+      title='Update Room' 
+      msg='Modify existing room.'
+      room={room}
+      mutation={updateRoom}
       hide={hide}
     />
   );
 }
 
-export default CreateRoomModal;
+export default ModifyRoomModal;
