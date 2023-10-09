@@ -6,7 +6,6 @@ const useUserStore = create((set) => ({
   user,
   darkMode: true,
   setUser: (user) => set({ user }),
-  logout: () => localStorage.removeItem('user') && set({ user: null }),
   changeDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
 }));
 
