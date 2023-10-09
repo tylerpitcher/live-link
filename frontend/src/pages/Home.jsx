@@ -13,7 +13,7 @@ import { RoomsList } from '../components/lists';
 
 function Home() {
   const [show, setShow] = useState(false);
-  const { user, logout } = useUserStore();
+  const { user, setUser } = useUserStore();
   const navigate = useNavigate();
 
   const { loading, error, data } = useQuery(USER_ROOMS, {
@@ -32,10 +32,14 @@ function Home() {
     </Box>
   );
 
-  if (error?.networkError.statusCode === 401) logout();
+  if (error?.networkError.statusCode === 401) {
+    setUser();
+    localStorage.removeItem('user');
+    navigate('/login');
+  }
 
-  const ownedRooms = data.user.ownedRooms || [];
-  const guestRooms = data.user.guestRooms || [];
+  const ownedRooms = data?.user?.ownedRooms || [];
+  const guestRooms = data?.user?.guestRooms || [];
 
   return (
     <StyledCard>

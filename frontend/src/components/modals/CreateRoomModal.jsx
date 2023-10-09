@@ -18,7 +18,7 @@ function CreateRoomModal({ hide }) {
   return (
     <RoomModal
       title='Create Room' 
-      msg='Create a room with a unique name.'
+      msg='Create a new room with a unique name.'
       mutation={createRoom}
       hide={hide}
     />
