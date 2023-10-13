@@ -47,7 +47,7 @@ function App() {
         },
       },
     },
-  }));
+  }), [darkMode]);
 
   useEffect(() => {
     return () => {

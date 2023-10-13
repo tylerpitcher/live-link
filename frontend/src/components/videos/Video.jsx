@@ -9,7 +9,7 @@ function Video({ name, stream, me }) {
 
   useEffect(() => {
     ref.current.srcObject = stream;
-  }, []);
+  }, [stream]);
 
   return (
     <Tooltip title={name}>
