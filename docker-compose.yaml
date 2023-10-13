@@ -1,0 +1,27 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      REDIS_URI: "redis://redis:6379"
+      FRONTEND_URL: "http://frontend:8080"
+      EXPIRATION: 604800
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      - redis
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:8080"
+    environment:
+      REACT_APP_BACKEND_URL: "http://backend:8000"
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
