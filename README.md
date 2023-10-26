@@ -1,4 +1,4 @@
-# live-link
+# Live Link
 A video conferencing platform using GraphQL, Redis, Express, React, &amp; Material-UI.
 
 ## How to Run
