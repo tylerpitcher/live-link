@@ -2,7 +2,7 @@
 A video conferencing platform using GraphQL, Redis, Express, React, &amp; Material-UI.
 
 ## Deployed Version
-https://tylerpitcher.site/livelink
+https://tylerpitcher.com/livelink
 
 ## How to Run
 1. Create a .env file in root directory
