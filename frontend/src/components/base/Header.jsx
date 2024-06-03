@@ -1,6 +1,6 @@
-import { AppBar, IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
+import { AppBar, IconButton, Toolbar, Tooltip, Link as MuiLink } from '@mui/material';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import useUserStore from '../../stores/userStore';
 
@@ -17,9 +17,15 @@ function Header({ transparent }) {
   return (
     <AppBar position='fixed' elevation={0} {...transparent && { color: 'transparent' }}>
       <Toolbar>
-        <Typography variant='h6' component='div' {...darkMode && { color: 'primary' }}>
-          LiveLink
-        </Typography>
+        <MuiLink 
+          color={'inherit'}
+          variant='h6' 
+          underline='none'
+          component={Link} 
+          to='/'
+        >
+          Live Link
+        </MuiLink>
         {user && <Tooltip title='Logout'>
           <IconButton color='inherit' onClick={logout} sx={{ ml: 'auto' }}>
             <LockPersonIcon/>

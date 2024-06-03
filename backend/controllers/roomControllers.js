@@ -17,7 +17,8 @@ async function updateGuest(ownerName, roomName, guestName, add) {
   return guestName;
 }
 
-async function getRoom(_, args) {
+async function getRoom(_, args, context) {
+  const user = context.user;
   const roomKey = `room:${args.name}`;
   const room = await getRedisKey(roomKey);
   if (!room) throw new Error('Room does not exist.');
@@ -26,6 +27,9 @@ async function getRoom(_, args) {
     delRedisKey(roomKey);
     throw new Error('Owner no longer exists.');
   }
+
+  const hasAccess = room.guests.concat(room.owner).includes(user.name);
+  if (!hasAccess) throw new Error('You do not have access to this room.');
 
   return room;
 }

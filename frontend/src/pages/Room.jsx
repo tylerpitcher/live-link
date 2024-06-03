@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import Header from '../components/base/Header';
 import useUserStore from '../stores/userStore';
 import VideoPanel from '../components/videos/VideoPanel';
+import StyledAlert from '../components/base/StyledAlert';
 import Center from '../components/base/Center';
 import Loader from '../components/base/Loader';
 import { getContext, ROOM } from '../operations';
@@ -33,7 +34,7 @@ function Room() {
 
   if (error) return (
     <Center>
-      {error.message}
+      <StyledAlert severity='error'>{error.message}</StyledAlert>
       <Header transparent/>
     </Center>
   );

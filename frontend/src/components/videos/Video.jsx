@@ -1,7 +1,5 @@
-import { Tooltip, Box } from '@mui/material';
+import { Tooltip, Box, Skeleton } from '@mui/material';
 import { useState, useRef, useEffect } from 'react';
-
-import Loader from '../base/Loader';
 
 function Video({ name, stream, me }) {
   const [loading, setLoading] = useState(true);
@@ -14,7 +12,7 @@ function Video({ name, stream, me }) {
   return (
     <Tooltip title={name}>
       <Box>
-        {loading && <Loader/>}
+        {loading && <Skeleton variant='rectangular' sx={{ paddingTop: '56.25%' }}/>}
         <video 
           playsInline 
           ref={ref} 
@@ -24,6 +22,8 @@ function Video({ name, stream, me }) {
           style={{ 
             width: '100%', 
             display: 'table-row',
+            objectFit: 'cover', 
+            aspectRatio: '16 / 9',
             ...(loading && { display: 'hidden' }),
             ...(me && {transform: 'rotateY(180deg)'}), 
           }} 
