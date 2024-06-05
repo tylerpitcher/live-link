@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import useUserStore from '../../stores/userStore';
 
 function Header({ transparent }) {
-  const { user, setUser, darkMode } = useUserStore();
+  const { user, setUser } = useUserStore();
   const navigate = useNavigate();
 
   const logout = () => {

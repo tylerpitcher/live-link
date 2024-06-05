@@ -50,7 +50,7 @@ function Login() {
         value={name}  
         placeholder='Username' 
         onChange={(event) => setName(event.target.value)}
-        error={error.code === 1}
+        error={error.code === 1 || error.code === 3}
         helperText={error.code === 1 && error.msg}
         disabled={loading}
       />
@@ -60,8 +60,8 @@ function Login() {
         placeholder='Password' 
         type='password'
         onChange={(event) => setPassword(event.target.value)}
-        error={error.code === 2}
-        helperText={error.code === 2 && error.msg}
+        error={error.code === 2 || error.code === 3}
+        helperText={(error.code === 2 || error.code === 3) && error.msg}
         disabled={loading}
       />
       <LoadingButton 

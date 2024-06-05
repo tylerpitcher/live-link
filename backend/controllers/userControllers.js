@@ -73,7 +73,7 @@ async function loginUser(req, res) {
   const match = await bcrypt.compare(password, user?.password || '');
   
   if (!match) return res.status(401).json({
-    code: 2,
+    code: 3,
     msg: 'Credentials do not match.',
   });
 
