@@ -23,19 +23,48 @@ async function getRoom(_, args, context) {
   const room = await getRedisKey(roomKey);
   if (!room) throw new Error('Room does not exist.');
 
-  if (!await getRedisKey(`user:${room.owner}`)) {
+  if (room?.whitelist && !room.guests.concat(room.owner).includes(user?.name)) {
+    throw new Error('You do not have access to this room.');
+  }
+
+  if (room?.whitelist && !await getRedisKey(`user:${room.owner}`)) {
     delRedisKey(roomKey);
     throw new Error('Owner no longer exists.');
   }
 
-  const hasAccess = room.guests.concat(room.owner).includes(user.name);
-  if (!hasAccess) throw new Error('You do not have access to this room.');
-
   return room;
+}
+
+async function ensureRoomExists(_, args, context) {
+  const owner = context.user;
+  const roomKey = `room:${args.name}`;
+
+  const room = await getRedisKey(roomKey);
+  if (room) return room;
+
+  const newRoom = {
+    name: args.name,
+    owner: owner?.name,
+    whitelist: false,
+    guests: [],
+  };
+
+  await setRedisKey(roomKey, newRoom);
+
+  if (owner?.name) await updateRedisKey(`user:${owner.name}`, {
+    ...owner,
+    ownedRooms: owner.ownedRooms.concat(args.name),
+  });
+
+  return newRoom;
 }
 
 async function createRoom(_, args, context) {
   const owner = context.user;
+
+  if (!owner?.name) throw new Error('Not authorized to create new rooms');
+
+  const whitelist = Boolean(owner.name && args.guests.length);
   const roomKey = `room:${args.name}`;
 
   const exists = await getRedisKey(roomKey);
@@ -48,7 +77,10 @@ async function createRoom(_, args, context) {
   const room = {
     name: args.name,
     owner: owner.name,
-    guests: guests.filter((guest) => guest),
+    whitelist,
+    guests: whitelist 
+      ? guests.filter((guest) => guest) 
+      : [],
   };
 
   await setRedisKey(roomKey, room);
@@ -62,7 +94,10 @@ async function createRoom(_, args, context) {
 
 async function updateRoom(_, args, context) {
   const room = await getRedisKey(`room:${args.name}`);
+  const whitelist = Boolean(args.guests.length);
   const owner = context.user;
+
+  if (!owner?.name) throw new Error('Not authorized to update rooms');
   
   if (!room) throw new Error('Room does not exist.');
   if (owner.name !== room.owner) throw new Error('User does not own room.');
@@ -73,7 +108,10 @@ async function updateRoom(_, args, context) {
 
   const updatedRoom = {
     ...room,
-    guests: args.guests.filter((name) => name !== owner.name),
+    whitelist: whitelist,
+    guests: whitelist 
+      ? args.guests.filter((name) => name !== owner.name) 
+      : [],
   };
 
   await updateRedisKey(`room:${args.name}`, updatedRoom);
@@ -82,6 +120,7 @@ async function updateRoom(_, args, context) {
 
 module.exports = {
   getRoom,
+  ensureRoomExists,
   createRoom,
   updateRoom,
 };

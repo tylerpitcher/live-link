@@ -1,20 +1,24 @@
 const jwt = require('jsonwebtoken');
+const uuid = require('uuid').v4;
 
 const { getRedisKey } = require('../utils/redis');
 
 module.exports = function handleSocket(socket, io) {
   socket.on('join', async (roomName, token) => {
     try {
-      if (!token) socket.disconnect();
-
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await getRedisKey(decoded.name);
+      let decoded, username;
+      if (token) {
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
+        username = (await getRedisKey(decoded.name)).name;
+      } else {
+        username = uuid();
+      }
 
       socket.join(roomName);
 
       socket.broadcast.to(roomName).emit('newUser', { 
         id: socket.id, 
-        name: user.name 
+        name: username 
       });
       
       socket.on('call', (details) => (
@@ -25,7 +29,7 @@ module.exports = function handleSocket(socket, io) {
         io.to(details.to).emit('accept', details.signal)
       ));
 
-      socket.on('disconnect', () => socket.broadcast.emit('exit', user.name));
+      socket.on('disconnect', () => socket.broadcast.emit('exit', username));
 
     } catch (error) {
       console.error(error);

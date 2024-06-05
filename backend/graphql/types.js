@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLList, GraphQLString } = require('graphql');
+const { GraphQLObjectType, GraphQLList, GraphQLString, GraphQLBoolean } = require('graphql');
 
 const { getRedisKey } = require('../utils/redis');
 
@@ -33,6 +33,7 @@ const RoomType = new GraphQLObjectType({
         return await getRedisKey(`user:${parent.owner}`);
       },
     },
+    whitelist: { type: GraphQLBoolean },
     guests: {
       type: GraphQLList(UserType),
       resolve: (parent) => gather(parent.guests, (name) => getRedisKey(`user:${name}`)),

@@ -1,9 +1,16 @@
-const { GraphQLNonNull, GraphQLString, GraphQLObjectType, GraphQLList } = require('graphql');
+const { GraphQLNonNull, GraphQLString, GraphQLObjectType, GraphQLList, GraphQLBoolean } = require('graphql');
 
-const { createRoom, updateRoom } = require('../controllers/roomControllers');
+const { ensureRoomExists, createRoom, updateRoom } = require('../controllers/roomControllers');
 const { RoomType } = require('./types');
 
 const roomMutations = {
+  ensureRoomExists: {
+    type: RoomType,
+    args: {
+      name: { type: GraphQLNonNull(GraphQLString) },
+    },
+    resolve: ensureRoomExists,
+  },
   createRoom: {
     type: RoomType,
     args: {
