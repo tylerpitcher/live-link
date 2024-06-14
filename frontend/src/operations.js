@@ -16,6 +16,7 @@ const USER_ROOMS = gql`
       name
       ownedRooms {
         name
+        whitelist
         guests {
           name
         }
@@ -34,9 +35,18 @@ const ROOM = gql`
       owner {
         name
       }
+      whitelist
       guests {
         name
       }
+    }
+  }
+`;
+
+const ENSURE_ROOM_EXISTS = gql`
+  mutation EnsureRoomExists($name: String!) {
+    ensureRoomExists(name: $name) {
+      name
     }
   }
 `;
@@ -57,4 +67,4 @@ const UPDATE_ROOM = gql`
   }
 `;
 
-export { getContext, USER_ROOMS, ROOM, CREATE_ROOM, UPDATE_ROOM };
+export { getContext, USER_ROOMS, ROOM, ENSURE_ROOM_EXISTS, CREATE_ROOM, UPDATE_ROOM };
