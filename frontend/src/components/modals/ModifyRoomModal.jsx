@@ -20,6 +20,7 @@ function ModifyRoomModal({ room, hide }) {
       modify
       title='Update Room' 
       msg='Modify existing room.'
+      severity='info'
       room={room}
       mutation={updateRoom}
       hide={hide}

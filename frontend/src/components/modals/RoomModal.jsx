@@ -7,8 +7,8 @@ import StyledAlert from '../base/StyledAlert';
 import StyledForm from '../base/StyledForm';
 import Center from '../base/Center';
 
-function RoomModal({ modify, title, msg, room, mutation, hide }) {
-  const { darkMode } = useUserStore();
+function RoomModal({ modify, title, msg, severity, room, mutation, hide }) {
+  const { user, darkMode } = useUserStore();
 
   const [name, setName] = useState(room?.name || '');
   const [input, setInput] = useState('');
@@ -37,7 +37,7 @@ function RoomModal({ modify, title, msg, room, mutation, hide }) {
     if (!name) return;
     
     setLoading(true);
-    mutation({ variables: { name: modify ? room.name : name, guests } })
+    mutation({ variables: { name: modify ? room.name : name, guests: user ? guests: [] } })
       .then(() => { setLoading(false); hide() })
       .catch((error) => { setLoading(false); setError(error.message) });
   };
@@ -49,7 +49,7 @@ function RoomModal({ modify, title, msg, room, mutation, hide }) {
           <StyledForm title={title} hide={hide} handleSubmit={handleSubmit}>
             {error
               ? <StyledAlert severity='error'>{error}</StyledAlert>
-              : <StyledAlert severity='info'>{msg}</StyledAlert>
+              : <StyledAlert severity={severity}>{msg}</StyledAlert>
             }
             <TextField 
               name='name'
@@ -63,17 +63,18 @@ function RoomModal({ modify, title, msg, room, mutation, hide }) {
                 sx={{ width: 1, mb: '3vh' }}
                 value={input}
                 placeholder='Guest'
-                helperText='Enter a name and press space'
+                helperText={user ? 'Enter a name and press space' : 'Must be logged in to add guests'}
                 onChange={handleChange}
-                disabled={loading}
+                disabled={loading || !user}
               />
               <Stack direction='row' flexWrap='wrap' spacing={1}>
-                {guests.map((guest, i) => <Chip 
-                  key={guest} 
-                  label={guest} 
-                  disabled={loading} 
-                  onDelete={() => handleDelete(i)}
-                />)}
+                {guests.length
+                  ? guests.map((guest, i) => <Chip 
+                    key={guest} 
+                    label={guest} 
+                    disabled={loading} 
+                    onDelete={() => handleDelete(i)}
+                  />) : <Chip label={'Anyone Can Join'}/>}
               </Stack>
             </Box>
           

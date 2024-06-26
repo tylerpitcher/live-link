@@ -35,36 +35,10 @@ async function getRoom(_, args, context) {
   return room;
 }
 
-async function ensureRoomExists(_, args, context) {
-  const owner = context.user;
-  const roomKey = `room:${args.name}`;
-
-  const room = await getRedisKey(roomKey);
-  if (room) return room;
-
-  const newRoom = {
-    name: args.name,
-    owner: owner?.name,
-    whitelist: false,
-    guests: [],
-  };
-
-  await setRedisKey(roomKey, newRoom);
-
-  if (owner?.name) await updateRedisKey(`user:${owner.name}`, {
-    ...owner,
-    ownedRooms: owner.ownedRooms.concat(args.name),
-  });
-
-  return newRoom;
-}
-
 async function createRoom(_, args, context) {
   const owner = context.user;
 
-  if (!owner?.name) throw new Error('Not authorized to create new rooms');
-
-  const whitelist = Boolean(owner.name && args.guests.length);
+  const whitelist = Boolean(owner?.name && args.guests.length);
   const roomKey = `room:${args.name}`;
 
   const exists = await getRedisKey(roomKey);
@@ -76,7 +50,7 @@ async function createRoom(_, args, context) {
 
   const room = {
     name: args.name,
-    owner: owner.name,
+    owner: owner?.name,
     whitelist,
     guests: whitelist 
       ? guests.filter((guest) => guest) 
@@ -84,7 +58,7 @@ async function createRoom(_, args, context) {
   };
 
   await setRedisKey(roomKey, room);
-  await updateRedisKey(`user:${owner.name}`, {
+  if (owner?.name) await updateRedisKey(`user:${owner.name}`, {
     ...owner,
     ownedRooms: owner.ownedRooms.concat(args.name),
   });
@@ -97,7 +71,7 @@ async function updateRoom(_, args, context) {
   const whitelist = Boolean(args.guests.length);
   const owner = context.user;
 
-  if (!owner?.name) throw new Error('Not authorized to update rooms');
+  if (!owner?.name) throw new Error('Not authorized to update rooms.');
   
   if (!room) throw new Error('Room does not exist.');
   if (owner.name !== room.owner) throw new Error('User does not own room.');
@@ -120,7 +94,6 @@ async function updateRoom(_, args, context) {
 
 module.exports = {
   getRoom,
-  ensureRoomExists,
   createRoom,
   updateRoom,
 };

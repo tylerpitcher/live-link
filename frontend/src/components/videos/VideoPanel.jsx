@@ -61,10 +61,10 @@ function VideoPanel({ roomName }) {
       myStream = stream;
       setMyStream({
         stream,
-        video: <Video name={user.name} stream={stream} me/>,
+        video: <Video name={user?.name || 'You'} stream={stream} me/>,
       });
 
-      socket.emit('join', roomName, user.token);
+      socket.emit('join', roomName, user?.token);
 
       socket.on('newUser', (newUser) => callNewUser(user, myStream, newUser, setMedia));
       socket.on('call', (caller) => acceptNewCall(myStream, caller, setMedia));

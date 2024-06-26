@@ -1,5 +1,6 @@
 import { AppBar, IconButton, Toolbar, Tooltip, Link as MuiLink } from '@mui/material';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
+import PasswordIcon from '@mui/icons-material/Password';
 import { Link, useNavigate } from 'react-router-dom';
 
 import useUserStore from '../../stores/userStore';
@@ -26,11 +27,17 @@ function Header({ transparent }) {
         >
           Live Link
         </MuiLink>
-        {user && <Tooltip title='Logout'>
-          <IconButton color='inherit' onClick={logout} sx={{ ml: 'auto' }}>
-            <LockPersonIcon/>
-          </IconButton>
-        </Tooltip>}
+        {user
+          ? <Tooltip title='Logout'>
+              <IconButton color='inherit' onClick={logout} sx={{ ml: 'auto' }}>
+                <LockPersonIcon/>
+              </IconButton>
+            </Tooltip> 
+          : <Tooltip title='Login'>
+            <IconButton component={Link} to='/login' color='inherit' sx={{ ml: 'auto' }}>
+              <PasswordIcon/>
+            </IconButton>
+          </Tooltip>}
       </Toolbar>
     </AppBar>
   );

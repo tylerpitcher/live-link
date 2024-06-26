@@ -9,16 +9,28 @@ function CreateRoomModal({ hide }) {
 
   const [createRoom] = useMutation(CREATE_ROOM, {
     ...getContext(user?.token),
-    refetchQueries: [{ 
-      query: USER_ROOMS,
-      ...getContext(user?.token),
-    }],
+    update(cache, { data: { createRoom } }) {
+      const { user } = cache.readQuery({ query: USER_ROOMS });
+
+      cache.writeQuery({
+        query: USER_ROOMS,
+        data: {
+          user: {
+            name: String(user?.name),
+            ownedRooms: user?.ownedRooms.concat(createRoom) || [createRoom],
+            guestRooms: user?.guestRooms || [],
+            __typename: 'User',
+          },
+        },
+      });
+    },
   });
 
   return (
     <RoomModal
       title='Create Room' 
-      msg='Create a new room with a unique name.'
+      msg={user ? 'Create a new room with a unique name.' : 'Unauthenticated user rooms are temporary.'}
+      severity={user ? 'info' : 'warning'}
       mutation={createRoom}
       hide={hide}
     />

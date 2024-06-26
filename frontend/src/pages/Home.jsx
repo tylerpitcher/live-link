@@ -1,7 +1,7 @@
 import { Box, Button, CardContent } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { StyledCard, StyledCardHeader } from '../components/cards';
 import CreateRoomModal from '../components/modals/CreateRoomModal';
@@ -17,13 +17,9 @@ function Home() {
   const navigate = useNavigate();
 
   const { loading, error, data } = useQuery(USER_ROOMS, {
-    pollInterval: 10000,
+    ...user && { pollInterval: 10000 },
     ...getContext(user?.token),
   });
-
-  useEffect(() => {
-    if (!user) navigate('/login');
-  }, [user, navigate]);
 
   if (loading) return (
     <Box>
