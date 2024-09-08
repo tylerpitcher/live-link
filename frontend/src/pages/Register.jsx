@@ -25,7 +25,7 @@ function Register() {
     
     if (!name || !password1 || !password2) return setLoading(false);
 
-    axios.post('/api/users/register', { name, password1, password2 })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/register`, { name, password1, password2 })
       .catch(({ response: res }) => {
         setLoading(false);
         setError(res.data);
@@ -35,12 +35,12 @@ function Register() {
         if (res?.status !== 201) return;
         setUser(res.data);
         localStorage.setItem('user', JSON.stringify(res.data));
-        navigate('/');
+        navigate('/livelink');
       });
   };
 
   useEffect(() => {
-    if (user) navigate('/');
+    if (user) navigate('/livelink');
   }, [user, navigate]);
 
   return (
@@ -84,7 +84,7 @@ function Register() {
         Sign Up
       </LoadingButton>
       <Typography sx={{ mt: '-2.5vh' }}>
-        Already have an account? <MuiLink component={Link} to='/login'>Login</MuiLink>
+        Already have an account? <MuiLink component={Link} to={`/livelink/login`}>Login</MuiLink>
       </Typography>
     </StyledForm>
   );

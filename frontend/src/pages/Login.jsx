@@ -24,7 +24,7 @@ function Login() {
     
     if (!name || !password) return setLoading(false);
 
-    axios.post('/api/users/login', { name, password })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/login`, { name, password })
       .catch(({ response: res }) => {
         setLoading(false);
         setError(res.data);
@@ -34,12 +34,12 @@ function Login() {
         if (res?.status !== 200) return;
         setUser(res.data);
         localStorage.setItem('user', JSON.stringify(res.data));
-        navigate('/');
+        navigate('/livelink');
       });
   };
 
   useEffect(() => {
-    if (user) navigate('/');
+    if (user) navigate('/livelink');
   }, [user, navigate]);
 
   return (
@@ -73,7 +73,7 @@ function Login() {
         Login
       </LoadingButton>
       <Typography sx={{ mt: '-2.5vh' }}>
-        Don't have an account? <MuiLink component={Link} to='/register'>Sign Up</MuiLink>
+        Don't have an account? <MuiLink component={Link} to={`/livelink/register`}>Sign Up</MuiLink>
       </Typography>
     </StyledForm>
   );

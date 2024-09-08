@@ -12,7 +12,7 @@ function Header({ transparent }) {
   const logout = () => {
     setUser();
     localStorage.removeItem('user');
-    navigate('/login');
+    navigate(`/livelink/login`);
   }
 
   return (
@@ -23,7 +23,7 @@ function Header({ transparent }) {
           variant='h6' 
           underline='none'
           component={Link} 
-          to='/'
+          to='/livelink'
         >
           Live Link
         </MuiLink>
@@ -34,7 +34,7 @@ function Header({ transparent }) {
               </IconButton>
             </Tooltip> 
           : <Tooltip title='Login'>
-            <IconButton component={Link} to='/login' color='inherit' sx={{ ml: 'auto' }}>
+            <IconButton component={Link} to={`/livelink/login`} color='inherit' sx={{ ml: 'auto' }}>
               <PasswordIcon/>
             </IconButton>
           </Tooltip>}

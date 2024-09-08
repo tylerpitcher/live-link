@@ -22,7 +22,7 @@ module.exports = function handleSocket(socket, io) {
       });
       
       socket.on('call', (details) => (
-        io.to(details.to).emit('call', { ...details, from: socket.id })
+        io.to(details.to).emit('call', { ...details, caller: username, from: socket.id })
       ));
 
       socket.on('accept', (details) => (

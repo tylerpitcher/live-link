@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://backend:8000",
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@apollo/client": "^3.8.3",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",

@@ -10,13 +10,12 @@ var socket;
 
 function callNewUser(me, myStream, newUser, setMedia) {
   const peer = new Peer({ initiator: true, trickle: false, stream: myStream });
-  if (me.name === newUser.name) return;
+  if (me && me.name === newUser.name) return;
 
   socket.on('accept', (signal) => peer.signal(signal));
 
   peer.on('signal', (signal) => socket.emit('call', {
     to: newUser.id,
-    caller: me.name,
     signal,
   }));
 
@@ -54,7 +53,7 @@ function VideoPanel({ roomName }) {
   const [media, setMedia] = useState({});
 
   useEffect(() => {
-    socket = io.connect(process.env.REACT_APP_BACKEND_URL);
+    socket = io.connect(process.env.REACT_APP_BACKEND_URL, { path: '/socket' });
 
     var myStream;
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {

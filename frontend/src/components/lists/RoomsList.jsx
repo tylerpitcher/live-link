@@ -20,7 +20,7 @@ function JoinForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`/room/${input}`);
+    navigate(`/livelink/room/${input}`);
   };
 
   return (
@@ -67,7 +67,7 @@ function RoomsList({ title, ownedRooms, guestRooms }) {
               <IconButton onClick={() => setRoom(room)}><EditIcon/></IconButton>
               }
             >
-            <ListItemButton component={Link} to={`/room/${room.name}`}>
+            <ListItemButton component={Link} to={`/livelink/room/${room.name}`}>
               <ListItemText>{room.name}</ListItemText>
             </ListItemButton>
           </StyledListItem>
@@ -77,7 +77,7 @@ function RoomsList({ title, ownedRooms, guestRooms }) {
             key={room.name}
             disablePadding
           >
-            <ListItemButton component={Link} to={`/room/${room.name}`}>
+            <ListItemButton component={Link} to={`/livelink/room/${room.name}`}>
               <ListItemText>{room.name}</ListItemText>
             </ListItemButton>
           </StyledListItem>

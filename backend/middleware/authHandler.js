@@ -12,7 +12,7 @@ async function authHandler(req, res, next) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await getRedisKey(decoded.name);
 
-    if (!user || user?.timestamp !== decoded?.timestamp) return res.sendStatus(401);
+    if (!user || user?.timestamp !== decoded?.timestamp) return next();
 
     req.user = user;
     return next();
