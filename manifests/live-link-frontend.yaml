@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: live-link-frontend
-        image: tylerpitcher/live-link-frontend:latest
+        image: tylerpitcher/live-link-frontend:86378dc
         ports:
         - containerPort: 80
 ---
