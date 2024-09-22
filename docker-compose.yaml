@@ -1,27 +1,33 @@
 version: "3"
 services:
   backend:
+    container_name: live-link-backend-service
     build:
       context: ./backend
     ports:
       - "8000:8000"
     environment:
-      REDIS_URI: "redis://redis:6379"
-      FRONTEND_URL: "http://localhost:8080"
+      REDIS_URI: "redis://live-link-redis-service:6379"
+      FRONTEND_URL: "http://localhost"
       EXPIRATION: 604800
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
       - redis
 
   frontend:
+    container_name: live-link-frontend-service
     build:
       context: ./frontend
+      args:
+        REACT_APP_BACKEND_URL: "http://localhost:8000"
     ports:
-      - "8080:8080"
-    environment:
-      REACT_APP_BACKEND_URL: "http://localhost:8000"
+      - "80:80"
+      
+    depends_on:
+      - redis
 
   redis:
+    container_name: live-link-redis-service
     image: redis
     ports:
       - "6379:6379"

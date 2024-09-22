@@ -31,7 +31,7 @@ function Home() {
   if (error?.networkError.statusCode === 401) {
     setUser();
     localStorage.removeItem('user');
-    navigate('/login');
+    navigate(`/livelink/login`);
   }
 
   const ownedRooms = data?.user?.ownedRooms || [];

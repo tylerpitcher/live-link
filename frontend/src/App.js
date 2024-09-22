@@ -26,7 +26,7 @@ const cache = new InMemoryCache({
 });
 
 const client = new ApolloClient({
-  uri: '/api/graphql',
+  uri: `${process.env.REACT_APP_BACKEND_URL}/api/graphql`,
   cache,
 });
 
@@ -62,13 +62,13 @@ function App() {
         <BrowserRouter>
         <Center>
           <Routes>
-            <Route path='/register' element={<Register/>}/>
-            <Route path='/login' element={<Login/>}/>
-            <Route path='/' element={<Home/>}/>
+            <Route path='/livelink/register' element={<Register/>}/>
+            <Route path='/livelink/login' element={<Login/>}/>
+            <Route path='/livelink' element={<Home/>}/>
           </Routes>
         </Center>
         <Routes>
-          <Route path='/room/:room' element={<Room/>}/>
+          <Route path={`/livelink/room/:room`} element={<Room/>}/>
         </Routes>
         </BrowserRouter>
       </ThemeProvider>

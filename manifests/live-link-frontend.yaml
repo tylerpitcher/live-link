@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: live-link-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: live-link-frontend
+  template:
+    metadata:
+      labels:
+        app: live-link-frontend
+    spec:
+      containers:
+      - name: live-link-frontend
+        image: tylerpitcher/live-link-frontend:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: live-link-frontend-service
+spec:
+  selector:
+    app: live-link-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: live-link-frontend-ingress-https
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`tylerpitcher.com`, `www.tylerpitcher.com`) && PathPrefix(`/livelink`)
+    kind: Rule
+    services:
+    - name: live-link-frontend-service
+      port: 80
+  tls:
+    secretName: tls-secret
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: live-link-frontend-ingress-http
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`tylerpitcher.com`, `www.tylerpitcher.com`)
+    kind: Rule
+    services:
+    - name: live-link-frontend-service
+      port: 80
+    middlewares:
+    - name: https-redirect
+

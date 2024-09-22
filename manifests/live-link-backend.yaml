@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: live-link-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      app: live-link-backend
   template:
     metadata:
       labels:
-        app: backend
+        app: live-link-backend
     spec:
       containers:
-      - name: backend
-        image: tylerpitcher/live-link-backend:3bdc5f9
+      - name: live-link-backend
+        image: tylerpitcher/live-link-backend:latest
         ports:
         - containerPort: 8000
         env:
         - name: REDIS_URI
-          value: "redis://redis-service:6379"
-        - name: HOST
+          value: "redis://live-link-redis-service:6379"
+        - name: FRONTEND_URL
           value: "https://www.tylerpitcher.com"
         - name: EXPIRATION
           value: "604800"
@@ -33,10 +33,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
+  name: live-link-backend-service
 spec:
   selector:
-    app: backend
+    app: live-link-backend
   ports:
   - protocol: TCP
     port: 8000
@@ -45,15 +45,15 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: backend-ingress
+  name: live-link-backend-ingress-https
 spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`tylerpitcher.com`, `www.tylerpitcher.com`) && PathPrefix(`/api`)
+  - match: Host(`tylerpitcher.com`, `www.tylerpitcher.com`) && (PathPrefix(`/api`) || PathPrefix(`/socket`))
     kind: Rule
     services:
-    - name: backend-service
+    - name: live-link-backend-service
       port: 8000
   tls:
     secretName: tls-secret

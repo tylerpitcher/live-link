@@ -13,6 +13,7 @@ app.use('/api/users', require('./routes/userRoutes'));
 
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
+  path: '/socket',
   cors: {
       origin: process.env.FRONTEND_URL,
       methods: ['GET', 'POST'],
