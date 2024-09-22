@@ -54,7 +54,7 @@ spec:
   entryPoints:
     - web
   routes:
-  - match: Host(`tylerpitcher.com`, `www.tylerpitcher.com`)
+  - match: Host(`tylerpitcher.com`, `www.tylerpitcher.com`) && PathPrefix(`/livelink`)
     kind: Rule
     services:
     - name: live-link-frontend-service
