@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: live-link-backend
-        image: tylerpitcher/live-link-backend:86378dc
+        image: tylerpitcher/live-link-backend:59f3100
         ports:
         - containerPort: 8000
         env:
